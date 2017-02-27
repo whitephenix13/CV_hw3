@@ -2,7 +2,7 @@ img = imread('sphere1.ppm');
 if length(size(img))>2
     img = rgb2gray(img);
 end
-[r,c,Ix,Iy] = harris_corner(img, 7);
+[r,c,Ix,Iy] = harris_corner(img, 7, 3);
 figure;
 subplot(2,2,1)
 imshow(Ix,[]);
