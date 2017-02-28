@@ -1,4 +1,4 @@
-function [r, c, Ix, Iy] = harris_corner(img, kernel_size)
+function [r, c, Ix, Iy] = harris_corner(img, kernel_size, window_size)
 % use sobel operator to approximate gaussian derivative
 fx = [-1 0 1;-2 0 2;-1 0 1];
 Ix = conv2(fx,double(img));
@@ -33,11 +33,19 @@ end;
 % retrieving corner points with 3x3 window
 % TODO : make the window general
 threshold = max_element * 0.1;
-for i = 2:height-1
-    for j = 2:width-1
-        if H(i,j) > threshold && H(i,j) > H(i-1,j-1) && H(i,j) > H(i-1,j) && H(i,j) > H(i-1,j+1) && H(i,j) > H(i,j-1) && H(i,j) > H(i,j+1) && H(i,j) > H(i+1,j-1) && H(i,j) > H(i+1,j) && H(i,j) > H(i+1,j+1)
+% only handles odd number of window_size
+pad = (window_size-1)/2;
+mid = (window_size * window_size + 1)/2;
+H = padarray(H,[pad pad]);
+for i = 1+pad:height-pad
+    for j = 1+pad:width-pad
+        sub_H = H(i-pad:i+pad,j-pad:j+pad);
+        if(sub_H(mid) > threshold && max(max(sub_H)) == sub_H(mid))
             result(i,j) = 1;
-        end;
+        end
+        %if H(i,j) > threshold && H(i,j) > H(i-1,j-1) && H(i,j) > H(i-1,j) && H(i,j) > H(i-1,j+1) && H(i,j) > H(i,j-1) && H(i,j) > H(i,j+1) && H(i,j) > H(i+1,j-1) && H(i,j) > H(i+1,j) && H(i,j) > H(i+1,j+1)
+        %    result(i,j) = 1;
+        %end;
     end;
 end;
 [r, c] = find(result == 1);

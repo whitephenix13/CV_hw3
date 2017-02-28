@@ -4,7 +4,7 @@ if(strcmp(test,'harris_corner'))
     if length(size(img))>2
         img = rgb2gray(img);
     end
-    [r,c,Ix,Iy] = harris_corner(img, 7);
+    [r,c,Ix,Iy] = harris_corner(img, 7, 3);
     figure;
     subplot(2,2,1)
     imshow(Ix,[]);
@@ -18,6 +18,7 @@ if(strcmp(test,'harris_corner'))
     % plot should receive c first because the plot function plots Y over X
     plot(c,r,'r.');
     title('image with corner points')
+
 elseif(strcmp(test,'optical_flow'))
     sphere1 = imread('sphere1.ppm');
     sphere2 = imread('sphere2.ppm');
