@@ -1,9 +1,18 @@
-function [r, c, Ix, Iy] = harris_corner(img, kernel_size, window_size)
+function [r, c, Ix, Iy] = harris_corner(image, kernel_size, window_size)
+
+[H,W,D] = size(image); 
+
+img = image;
+if D>1
+    img = rgb2gray(image);
+end
+
+disp(size(img))
 % use sobel operator to approximate gaussian derivative
 fx = [-1 0 1;-2 0 2;-1 0 1];
-Ix = conv2(fx,double(img));
+Ix = conv2(double(img),fx);
 fy = [1 2 1;0 0 0;-1 -2 -1];
-Iy = conv2(fy,double(img)); 
+Iy = conv2(double(img),fy); 
 
 Ix2 = Ix.^2;
 Iy2 = Iy.^2;
