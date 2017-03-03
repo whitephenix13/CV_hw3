@@ -1,4 +1,4 @@
-function [ v ] = optical_flow( image1 , image2 , region_size, kernel_size, debug) %region_size = 15 for image of size 256
+function [ vect_u, vect_v ] = optical_flow( image1 , image2 , region_size, kernel_size, debug) %region_size = 15 for image of size 256
 %divide image on non overlaping regions
 
 [H,W,D] = size(image1); 
@@ -48,15 +48,19 @@ for reg=1:x_num_region*y_num_region
     A=zeros(region_size^2,2);
     b=zeros(region_size^2,1);
    [s1,s2,s3]= size(regions1(reg,:,:));
+   
+    sigma = 0.5;
     
-    %g_x=fspecial('gaussian',[1 kernel_size]);
-    %img_X=imfilter(reshape(regions1(reg,:,:),[s2,s3]),g_x);
-    %g_y=fspecial('gaussian',[kernel_size 1]);
-    %img_Y=imfilter(reshape(regions1(reg,:,:),[s2,s3]),g_y);
-    fx = [-1 0 1;-2 0 2;-1 0 1];
-    img_X = conv2(double(reshape(regions1(reg,:,:),[s2,s3])),fx,'same');
-    fy = [1 2 1;0 0 0;-1 -2 -1];
-    img_Y = conv2(double(reshape(regions1(reg,:,:),[s2,s3])),fy,'same'); 
+    % smoothing first then derivative
+    %g=fspecial('gaussian',[kernel_size kernel_size]);
+    %im=imfilter(reshape(regions1(reg,:,:),[s2,s3]),g);
+    %[img_X,img_Y] = imgradientxy(im);
+    
+    % derivative first then smoothing
+    g=fspecial('gaussian',[kernel_size kernel_size]);
+    [im_X,im_Y] = imgradientxy(reshape(regions1(reg,:,:),[s2,s3]));
+    img_X=imfilter(im_X,g);
+    img_Y=imfilter(im_Y,g);
     
     for i=1:region_size^2
       y=mod(i-1,region_size)+1;
@@ -70,14 +74,10 @@ end
 %solve v = (A^T A)^(-1) A^T b
 %display result using "quiver": display vector u v at position x y
 
-[x,y] = meshgrid(floor(region_size/2):region_size:H,floor(region_size/2):region_size:W);
+[x,y] = meshgrid(floor(region_size/2):region_size:H-floor(region_size/2),floor(region_size/2):region_size:W-floor(region_size/2));
 vect_u=zeros(size(x));
 vect_v=zeros(size(y));
 for i=1:(x_num_region*y_num_region)
-    %x_coord = mod((i-1),x_num_region)* region_size + floor(region_size/2); 
-    %y_coord = floor ( (i-1)/ x_num_region)* region_size+ floor( region_size/2) ;  
-    %vect_u(x_coord,y_coord)=v(i,1);
-    %vect_v(x_coord,y_coord)=v(i,2);
     yy= mod((i-1),x_num_region)+1;
     xx=floor((i-1)/x_num_region)+1;
     vect_u(xx,yy)=v(i,1);

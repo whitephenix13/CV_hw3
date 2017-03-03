@@ -9,10 +9,11 @@ end
 
 disp(size(img))
 % use sobel operator to approximate gaussian derivative
-fx = [-1 0 1;-2 0 2;-1 0 1];
-Ix = conv2(double(img),fx);
-fy = [1 2 1;0 0 0;-1 -2 -1];
-Iy = conv2(double(img),fy); 
+%fx = [-1 0 1;-2 0 2;-1 0 1];
+%Ix = conv2(double(img),fx);
+%fy = [1 2 1;0 0 0;-1 -2 -1];
+%Iy = conv2(double(img),fy);
+[Ix,Iy] = imgradientxy(img);
 
 Ix2 = Ix.^2;
 Iy2 = Iy.^2;

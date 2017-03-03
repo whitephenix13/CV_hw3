@@ -1,7 +1,7 @@
 test='optical_flow'; % harris_corner optical_flow
 if(strcmp(test,'harris_corner'))
     img = imread('sphere1.ppm');
-    [r,c,Ix,Iy] = harris_corner(img, 7, 3);
+    [r,c,Ix,Iy] = harris_corner(img, 15, 3);
     figure;
     subplot(2,2,1)
     imshow(Ix,[]);
@@ -18,11 +18,11 @@ if(strcmp(test,'harris_corner'))
 
 elseif(strcmp(test,'optical_flow'))
     sphere1 = imread('sphere1.ppm');
-    sphere2 = imread('sphere1.ppm');
+    sphere2 = imread('sphere2.ppm');
     synth1 = imread('synth1.pgm');
     synth2 = imread('synth2.pgm');
 
-    %optical_flow( sphere1 , sphere2 , 15, 3, true);
-    optical_flow( synth1 , synth2 , 10, 3, true);
+    optical_flow( sphere1 , sphere2 , 15, 3, true);
+    %optical_flow( synth1 , synth2 , 10, 3, true);
 
 end
