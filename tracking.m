@@ -24,8 +24,8 @@ for i=1:length(listing)-4
         [H2,W2] = size(vect_u);
         if(x_reg(j) < W2 && (y_reg(j) < H2))
            % {x_reg(j),y_reg(j),vect_u(y_reg(j),x_reg(j)),vect_v(y_reg(j),x_reg(j))}
-            row(j) = row(j) + vect_u(y_reg(j),x_reg(j))*region_size;
-            col(j) = col(j) + vect_v(y_reg(j),x_reg(j))*region_size;
+            row(j) = row(j) + vect_u(y_reg(j),x_reg(j));
+            col(j) = col(j) + vect_v(y_reg(j),x_reg(j));
         end
     end
     imshow(mem_image);
