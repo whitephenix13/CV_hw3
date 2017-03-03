@@ -25,6 +25,6 @@ elseif(strcmp(test,'optical_flow'))
     test2 = imread('person_toy/00000004.jpg');
     %optical_flow( sphere1 , sphere2 , 15, 3, true);
     %optical_flow( synth1 , synth2 , 10, 3, true);
-    optical_flow( test1 , test2 , 25, 3, true);
+    optical_flow( test1 , test2 , 50, 3, true);
 
 end
