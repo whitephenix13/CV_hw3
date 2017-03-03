@@ -10,7 +10,9 @@ mem_image = imread(name);
 [H,W,D] = size(mem_image);
 
 [row,col,Ix,Iy] = harris_corner(mem_image, kernel_size, window_size);
-[x,y] = meshgrid(floor(region_size/2):region_size:W-floor(region_size/2),floor(region_size/2):region_size:H-floor(region_size/2));
+[xt,yt]= meshgrid(col,row);%x,y to plot the optical flow
+vect_ut = zeros(size(xt));%vectors to plot the optical flow
+vect_vt = zeros(size(yt));
 
 figure;
 for i=1:length(listing)-4
@@ -24,13 +26,16 @@ for i=1:length(listing)-4
         [H2,W2] = size(vect_u);
         if(x_reg(j) < W2 && (y_reg(j) < H2))
            % {x_reg(j),y_reg(j),vect_u(y_reg(j),x_reg(j)),vect_v(y_reg(j),x_reg(j))}
-            row(j) = row(j) + vect_u(y_reg(j),x_reg(j));
-            col(j) = col(j) + vect_v(y_reg(j),x_reg(j));
+            vect_ut(j,j)=vect_u(x_reg(j),y_reg(j));
+            vect_vt(j,j)=vect_v(x_reg(j),y_reg(j));
+            row(j) = row(j) + vect_v(x_reg(j),y_reg(j));
+            col(j) = col(j) + vect_u(x_reg(j),y_reg(j));
         end
     end
     imshow(mem_image);
+    disp('show new image')
     hold on;
-    quiver(x,y,vect_u,vect_v,'y');
+    quiver(xt,yt,vect_ut,vect_vt,'y');
     % plot should receive c first because the plot function plots Y over X
     plot(col,row,'r.');
     hold off;
